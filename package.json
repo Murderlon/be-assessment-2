@@ -1,0 +1,25 @@
+{
+  "name": "be-assessment-2",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/Murderlon/be-assessment-2.git",
+  "author": "Murderlon <hello@murderlon.me>",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "prettier": "prettier-eslint --write 'index.js'"
+  },
+  "lint-staged": {
+    "index.js": [
+      "prettier-eslint --write",
+      "git add"
+    ]
+  },
+  "devDependencies": {
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-prettier": "^2.6.0",
+    "husky": "^0.14.3",
+    "lint-staged": "^7.0.2",
+    "prettier-eslint-cli": "^4.7.1"
+  } 
+}
