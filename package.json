@@ -16,8 +16,12 @@
     ]
   },
   "devDependencies": {
+    "dotenv": "^5.0.1",
     "husky": "^0.14.3",
     "lint-staged": "^7.0.2",
     "prettier-standard": "^8.0.0"
+  },
+  "dependencies": {
+    "mongodb": "^3.0.5"
   }
 }
