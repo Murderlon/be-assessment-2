@@ -7,7 +7,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "format": "prettier-standard --write 'index.js'"
+    "format": "prettier-standard 'index.js'"
   },
   "lint-staged": {
     "index.js": [
