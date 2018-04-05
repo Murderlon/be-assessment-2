@@ -1,18 +1,17 @@
-require('dotenv').config()
 const fs = require('fs')
 const path = require('path')
 const http = require('http')
 const qs = require('querystring')
-const MongoClient = require('mongodb').MongoClient
+
+const mongo = require('./db')
 
 const port = process.env.PORT || 1900
-
-http.createServer(onrequest).listen(port)
-
 const mime = {
   '.html': 'text/html',
   '.css': 'text/css'
 }
+
+http.createServer(onrequest).listen(port)
 
 function onrequest (req, res) {
   if (req.method === 'GET') {
@@ -41,18 +40,17 @@ function onrequest (req, res) {
   } else if (req.method === 'POST') {
     let buf = ''
     req.on('data', data => (buf += data))
-    req.on('end', () => console.log(qs.parse(buf)))
+    req.on('end', () => {
+      mongo((db, client) => {
+        const collection = db.collection('users')
+        const user = qs.parse(buf)
+        collection.insertOne(user)
+        client.close()
+      })
 
-    MongoClient.connect(process.env.DB_URL, (err, client) => {
-      const db = client.db('backend')
-      const collection = db.collection('users')
-      const user = qs.parse(buf)
-      collection.insertOne(user)
-      client.close()
+      res.statusCode = 302
+      res.setHeader('Location', '/')
+      res.end()
     })
-
-    res.statusCode = 302
-    res.setHeader('Location', '/')
-    res.end()
   }
 }
