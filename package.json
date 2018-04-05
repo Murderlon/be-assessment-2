@@ -7,21 +7,28 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "format": "prettier-standard 'index.js'"
+    "lint": "standard"
   },
   "lint-staged": {
     "index.js": [
-      "prettier-standard --write",
+      "standard",
       "git add"
     ]
   },
   "devDependencies": {
     "dotenv": "^5.0.1",
+    "eslint": "^4.19.1",
+    "eslint-config-standard": "^11.0.0",
+    "eslint-plugin-import": "^2.10.0",
+    "eslint-plugin-node": "^6.0.1",
+    "eslint-plugin-promise": "^3.7.0",
+    "eslint-plugin-standard": "^3.0.1",
     "husky": "^0.14.3",
     "lint-staged": "^7.0.2",
-    "prettier-standard": "^8.0.0"
+    "standard": "^11.0.1"
   },
   "dependencies": {
+    "argon2": "^0.17.3",
     "mongodb": "^3.0.5"
   }
 }
