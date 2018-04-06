@@ -7,11 +7,11 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "lint": "standard"
+    "format": "standard --fix"
   },
   "lint-staged": {
-    "index.js": [
-      "standard",
+    "**/*.js": [
+      "standard --fix",
       "git add"
     ]
   },

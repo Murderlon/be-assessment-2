@@ -8,6 +8,9 @@ const argon2 = require('argon2')
 const MongoClient = require('mongodb').MongoClient
 
 let db = null;
+const template = require('./lib/template.js')
+const foo = template("./static/test.template", { name: "Chad" });
+console.log(foo);
 
 (async () => {
   const client = await MongoClient.connect(process.env.DB_URL)
@@ -22,8 +25,8 @@ const mime = {
 
 http.createServer(onrequest).listen(port)
 
-function onrequest (req, res) {
-  function onread (err, buf) {
+function onrequest(req, res) {
+  function onread(err, buf) {
     res.setHeader('Content-Type', 'text/html')
 
     if (err) {
@@ -60,10 +63,10 @@ function onrequest (req, res) {
           const collection = db.collection('users')
           const { username, password } = qs.parse(buf)
 
-          collection.findOne({username}, async (err, result) => {
+          collection.findOne({ username }, async (err, result) => {
             if (err) {
               res.statusCode = 500
-              res.end('Not found\n')
+              res.end('Internal server error')
             } else if (result) {
               res.statusCode = 412
               res.end('Username taken\n')
