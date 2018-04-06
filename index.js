@@ -8,9 +8,6 @@ const argon2 = require('argon2')
 const MongoClient = require('mongodb').MongoClient
 
 let db = null;
-const template = require('./lib/template.js')
-const foo = template("./static/test.template", { name: "Chad" });
-console.log(foo);
 
 (async () => {
   const client = await MongoClient.connect(process.env.DB_URL)
