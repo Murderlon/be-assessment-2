@@ -1,7 +1,7 @@
 {
   "name": "be-assessment-2",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server.js",
   "repository": "https://github.com/Murderlon/be-assessment-2.git",
   "author": "Murderlon <hello@murderlon.me>",
   "license": "MIT",
@@ -29,6 +29,10 @@
   },
   "dependencies": {
     "argon2": "^0.17.3",
-    "mongodb": "^3.0.5"
+    "body-parser": "^1.18.2",
+    "ejs": "^2.5.8",
+    "express": "^4.16.3",
+    "mongodb": "^3.0.5",
+    "node-status-codes": "^2.0.1"
   }
 }

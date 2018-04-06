@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang=en>
+<meta charset=utf8>
+<meta name=viewport content=width=device-width,initial-scale=1>
+<link rel="shortcut icon" type=image/x-icon href=data:image/x-icon;,>
+<title>Error</title>
+<link rel=stylesheet href=/index.css>
+<main class=container>
+    <% if (id > 200) { // actual http errors %>
+      <article class="animal frame">
+        <figure class=frame-image>
+          <img src="https://http.cat/<%= id  %>" alt="<%= id %> <%= title %>">
+        </figure>
+      </article>
+    <% } else { %>
+      <article class="animal frame">
+        <figure class=frame-image>
+          <img src=https://http.cat/422 alt>
+        </figure>
+        <h1><%= title %></h1>
+        <p><%= id %>: <%= detail %></p>
+      </article>
+    <% } %>
+</main>
