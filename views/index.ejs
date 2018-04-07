@@ -9,7 +9,13 @@
 </head>
 <body>
   <header>
-    <p><a href="/login">Login</a> or <a href="/register">Register</a></p>
+    <% if (username) { %>
+      <p>Welcome <%= username %></p>
+      <p><a href="/logout">Logout</a></p>
+    <% } else { %>
+      <p>Howdy!</p>      
+      <p><a href="/login">Login</a> or <a href="/register">Register</a></p>
+    <% } %>
   </header>
   <main>
     <% images.map(img => { %>

@@ -1,17 +1,26 @@
 const fs = require('fs')
 const express = require('express')
 const passport = require('passport')
+const delve = require('dlv')
 
 const User = require('../models/user')
 const createError = require('../lib/createError')
 
 const router = express.Router()
 
-router.get('/', (req, res, next) => {
-  console.log(req.user)
-  fs.readdir('./static/img', (err, images) =>
-    err ? next(createError(500)) : res.render('index', { images }))
-})
+router.get('/', (req, res, next) =>
+  fs.readdir(
+    './static/img',
+    (err, images) =>
+      err
+        ? next(createError(500))
+        : res.render('index', {
+          images,
+          // delve returns the username if it exists
+          username: delve(req, 'user.username')
+        })
+  )
+)
 
 router.get('/register', (req, res) => res.render('register', { error: null }))
 
@@ -33,7 +42,7 @@ router.post('/register', (req, res, next) => {
     password,
     (err, account) =>
       err
-        ? res.render('register', { error: err.message })
+        ? res.status(422).render('register', { error: err.message })
         : passport.authenticate('local')(req, res, () =>
           req.session.save(
             err => (err ? next(createError(500)) : res.redirect('/'))
