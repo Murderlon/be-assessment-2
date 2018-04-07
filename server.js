@@ -1,33 +1,42 @@
 require('dotenv').config()
+const crypto = require('crypto')
 const express = require('express')
+const session = require('express-session')
 const bodyParser = require('body-parser')
-const status = require('node-status-codes')
+const cookieParser = require('cookie-parser')
+const passport = require('passport')
+const LocalStrategy = require('passport-local').Strategy
+const mongoose = require('mongoose')
+const logger = require('morgan')
+
+const routes = require('./routes')
+const notFound = require('./routes/notFound')
+const error = require('./routes/error')
+const User = require('./models/user')
 
 const port = process.env.PORT || 1900
+
+mongoose.connect(process.env.DB_URL)
 
 express()
   .set('view engine', 'ejs')
   .set('views', 'views')
+  .use(logger('dev'))
   .use(bodyParser.urlencoded({ extended: false }))
   .use(bodyParser.json())
+  .use(cookieParser())
+  .use(session({
+    secret: crypto.randomBytes(64).toString('hex'),
+    resave: false,
+    saveUninitialized: false}))
+  .use(passport.initialize())
+  .use(passport.session())
   .use(express.static('static'))
-  .get('/', index)
-  .get('*', error)
+  .use('/', routes)
+  .use(notFound)
+  .use(error)
   .listen(port)
 
-function index (req, res, next) {
-  req.code = 404
-  next()
-}
-
-function error (req, res) {
-  const code = req.code || 404
-  res.format({
-    json: () => res.status(code).json(status[code]),
-    html: () => res.status(code).render('error', {
-      id: code,
-      title: status[code],
-      detail: status[code]
-    })
-  })
-}
+passport.use(new LocalStrategy(User.authenticate()))
+passport.serializeUser(User.serializeUser())
+passport.deserializeUser(User.deserializeUser())
