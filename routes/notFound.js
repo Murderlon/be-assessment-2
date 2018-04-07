@@ -1,8 +1,4 @@
-const status = require('node-status-codes')
+const createError = require('../lib/createError')
 
 // catch 404 and forward to error handler
-module.exports = (req, res, next) => {
-  const err = new Error(status[404])
-  err.status = 404
-  next(err)
-}
+module.exports = (req, res, next) => next(createError(404))
