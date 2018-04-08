@@ -13,6 +13,7 @@ const notFound = require('./routes/notFound')
 const error = require('./routes/error')
 
 const port = process.env.PORT || 1900
+const secret = crypto.randomBytes(64).toString('hex')
 
 require('./lib/passport')(passport)
 mongoose.connect(process.env.DB_URL)
@@ -25,7 +26,7 @@ express()
   .use(bodyParser.json())
   .use(cookieParser())
   .use(session({
-    secret: crypto.randomBytes(64).toString('hex'),
+    secret,
     resave: false,
     saveUninitialized: false}))
   .use(passport.initialize())

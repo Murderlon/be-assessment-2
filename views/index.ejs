@@ -12,18 +12,23 @@
     <% if (username) { %>
       <p>Welcome <%= username %></p>
       <p><a href="/logout">Logout</a></p>
+      <p><a href="/upload">Upload</a></p>
     <% } else { %>
-      <p>Howdy!</p>      
+      <p>Waddup</p>      
       <p><a href="/login">Login</a> or <a href="/register">Register</a></p>
     <% } %>
   </header>
   <main>
-    <% images.map(img => { %>
-      <figure>
-        <img src="/img/<%= img  %>">
-        <figcaption><%= img %></figcaption>
-      </figure>
-      <% }) %>
+    <% images.map(({ file, title, description, date }) => { %>
+      <div>
+        <h2><%= title  %></h2>
+        <time><%= date  %></time>
+        <figure>
+          <img src="/img/<%= file.name  %>" alt="<%= description %>">
+          <figcaption><%= description %></figcaption>
+        </figure>
+        <% }) %>
+      </div>
     </main>
 </body>
 </html>
