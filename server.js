@@ -1,6 +1,7 @@
 require('dotenv').config()
 const crypto = require('crypto')
 const express = require('express')
+const compression = require('compression')
 const session = require('express-session')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
@@ -22,13 +23,17 @@ express()
   .set('view engine', 'ejs')
   .set('views', 'views')
   .use(logger('dev'))
+  .use(compression({ threshold: 0, filter: () => true }))
   .use(bodyParser.urlencoded({ extended: false }))
   .use(bodyParser.json())
   .use(cookieParser())
-  .use(session({
-    secret,
-    resave: false,
-    saveUninitialized: false}))
+  .use(
+    session({
+      secret,
+      resave: false,
+      saveUninitialized: false
+    })
+  )
   .use(passport.initialize())
   .use(passport.session())
   .use(express.static('static'))
