@@ -8,8 +8,8 @@
 </head>
 <body>
   <h1>Login</h1>
-  <% if (error && error.length > 0) { %>
-    <p class="error"><%= error %></p>
+  <% if (err) { %>
+    <p class="error"><%= err %></p>
   <% } %>
   <form action="/login" method="POST">
     <label>
