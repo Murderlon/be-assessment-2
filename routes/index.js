@@ -46,7 +46,7 @@ router.post('/register', (req, res, next) => {
     password,
     (err, account) =>
       err
-        ? res.status(422).render('register', { error: err.message })
+        ? res.status(422).render('register', { err: err.message })
         : passport.authenticate('local')(req, res, () =>
           req.session.save(
             err => (err ? next(createError(500)) : res.redirect('/'))
