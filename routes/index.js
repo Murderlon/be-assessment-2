@@ -44,20 +44,23 @@ router.get('/logout', (req, res) => {
 })
 
 router.get('/delete/:id', (req, res, next) => {
-  !req.user
-    ? next(createError(401))
-    : Image.findOneAndRemove({ _id: req.params.id }, (err, image) => {
-      if (err) {
-        return next(createError(500))
-      }
-      if (!image) {
-        return next()
-      }
-      fs.unlink(
-        path.resolve(__dirname, `../static/img/${image.file.name}`),
-        err => (err ? next(createError(500)) : res.status(204).redirect('/'))
-      )
-    })
+  Image.findOne({ _id: req.params.id }, (err, image) => {
+    const isAllowed = delve(req, 'user.username') === delve(image, 'author')
+    if (!isAllowed) {
+      return next(createError(401))
+    }
+    if (err) {
+      return next(createError(500))
+    }
+    if (!image) {
+      return next()
+    }
+    image.remove(err => err && next(createError(500)))
+    fs.unlink(
+      path.resolve(__dirname, `../static/img/${image.file.name}`),
+      err => (err ? next(createError(500)) : res.status(204).redirect('/'))
+    )
+  })
 })
 
 router.get('/:id', (req, res, next) =>
