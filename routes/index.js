@@ -1,12 +1,10 @@
 const fs = require('fs')
 const path = require('path')
 const express = require('express')
-const passport = require('passport')
 const multer = require('multer')
 const delve = require('dlv')
 const shortid = require('shortid')
 
-const User = require('../models/user')
 const Image = require('../models/image')
 const createError = require('../lib/createError')
 
@@ -36,15 +34,6 @@ router.get(
   '/upload',
   (req, res) => (!req.user ? res.redirect('/') : res.render('upload'))
 )
-
-router.get('/register', (req, res) => res.render('register', { err: null }))
-
-router.get('/login', (req, res) => res.render('login', { err: null }))
-
-router.get('/logout', (req, res) => {
-  req.logout()
-  res.redirect('/')
-})
 
 router.get('/post/:id', (req, res, next) =>
   Image.findOne({ _id: req.params.id }, (err, image) => {
@@ -94,30 +83,6 @@ router.post('/upload', upload.single('image'), (req, res, next) => {
   } catch (err) {
     next(createError(500))
   }
-})
-
-router.post(
-  '/login',
-  passport.authenticate('local', { failWithError: true }),
-  (req, res) => res.redirect('/'),
-  ({ status, message }, req, res, next) =>
-    res.status(status).render('login', { err: message })
-)
-
-router.post('/register', (req, res, next) => {
-  const { username, password } = req.body
-  User.register(
-    new User({ username }),
-    password,
-    (err, account) =>
-      err
-        ? res.status(422).render('register', { err: err.message })
-        : passport.authenticate('local')(req, res, () =>
-          req.session.save(
-            err => (err ? next(createError(500)) : res.redirect('/'))
-          )
-        )
-  )
 })
 
 router.post('/edit/:id', (req, res, next) => {

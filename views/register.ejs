@@ -1,27 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Register</title>
 </head>
+
 <body>
   <h1>Register</h1>
   <% if (err) { %>
-    <p class="error"><%= err %></p>
-  <% } %>
-  <form action="/register" method="POST">
-    <label>
-      Username
-      <input type="text" name="username" required>
-    </label>
-    <label>
-      Password
-      <input type="password" name="password" required>
-    </label>
-    <button type="submit">Register</button>
-  </form>
-  <a href="/register">Already have an account? Login here.</a>
+    <p class="error">
+      <%= err %>
+    </p>
+    <% } %>
+      <form action="/auth/register" method="POST">
+        <label>
+          Username
+          <input type="text" name="username" required>
+        </label>
+        <label>
+          Password
+          <input type="password" name="password" required>
+        </label>
+        <button type="submit">Register</button>
+      </form>
+      <a href="/auth/login">Already have an account? Login here.</a>
 </body>
+
 </html>
