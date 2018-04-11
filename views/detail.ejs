@@ -17,8 +17,10 @@
         <figcaption><%= image.description %></figcaption>
       </figure>
     <% if (isAuthor) { %>
-      <p><a href="/delete/<%= image._id %>">Remove post</a></p>
+    <form action="/<%= image._id %>" method="POST">
+      <button type="submit">Remove post</button>
     <% } %>      
+    </form>
     </div>
   </main>
 </body>

@@ -43,26 +43,6 @@ router.get('/logout', (req, res) => {
   res.redirect('/')
 })
 
-router.get('/delete/:id', (req, res, next) => {
-  Image.findOne({ _id: req.params.id }, (err, image) => {
-    const isAllowed = delve(req, 'user.username') === delve(image, 'author')
-    if (!isAllowed) {
-      return next(createError(401))
-    }
-    if (err) {
-      return next(createError(500))
-    }
-    if (!image) {
-      return next()
-    }
-    image.remove(err => err && next(createError(500)))
-    fs.unlink(
-      path.resolve(__dirname, `../static/img/${image.file.name}`),
-      err => (err ? next(createError(500)) : res.status(204).redirect('/'))
-    )
-  })
-})
-
 router.get('/:id', (req, res, next) =>
   Image.findOne({ _id: req.params.id }, (err, image) => {
     const isAuthor = delve(req, 'user.username') === delve(image, 'author')
@@ -117,6 +97,26 @@ router.post('/register', (req, res, next) => {
           )
         )
   )
+})
+
+router.post('/:id', (req, res, next) => {
+  Image.findOne({ _id: req.params.id }, (err, image) => {
+    const isAllowed = delve(req, 'user.username') === delve(image, 'author')
+    if (!isAllowed) {
+      return next(createError(401))
+    }
+    if (err) {
+      return next(createError(500))
+    }
+    if (!image) {
+      return next()
+    }
+    image.remove(err => err && next(createError(500)))
+    fs.unlink(
+      path.resolve(__dirname, `../static/img/${image.file.name}`),
+      err => (err ? next(createError(500)) : res.status(204).redirect('/'))
+    )
+  })
 })
 
 module.exports = router
