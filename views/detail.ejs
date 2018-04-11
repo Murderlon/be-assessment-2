@@ -25,7 +25,7 @@
         </figcaption>
       </figure>
       <% if (isAuthor) { %>
-        <form action="/<%= image._id %>" method="POST">
+        <form action="/delete/<%= image._id %>" method="POST">
           <button type="submit">Remove post</button>
         </form>
         <a href="/edit/<%= image._id %>">Edit</a>

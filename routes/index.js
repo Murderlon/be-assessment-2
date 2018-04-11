@@ -104,7 +104,7 @@ router.post('/edit/:id', (req, res, next) => {
   })
 })
 
-router.post('/:id', (req, res, next) => {
+router.post('/delete/:id', (req, res, next) => {
   Image.findOne({ _id: req.params.id }, (err, image) => {
     const isAllowed = delve(req, 'user.username') === delve(image, 'author')
     if (!isAllowed) {
