@@ -1,5 +1,4 @@
 require('dotenv').config()
-const crypto = require('crypto')
 const express = require('express')
 const compression = require('compression')
 const helmet = require('helmet')
@@ -8,6 +7,7 @@ const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const passport = require('passport')
 const mongoose = require('mongoose')
+const MongoStore = require('connect-mongo')(session)
 const logger = require('morgan')
 
 const routes = require('./routes')
@@ -15,7 +15,6 @@ const notFound = require('./routes/notFound')
 const error = require('./routes/error')
 
 const port = process.env.PORT || 1900
-const secret = crypto.randomBytes(64).toString('hex')
 
 require('./lib/passport')(passport)
 mongoose.connect(process.env.DB_URL)
@@ -31,9 +30,10 @@ express()
   .use(cookieParser())
   .use(
     session({
-      secret,
+      secret: process.env.SESSION_SECRET,
       resave: false,
-      saveUninitialized: false
+      saveUninitialized: false,
+      store: new MongoStore({ mongooseConnection: mongoose.connection })
     })
   )
   .use(passport.initialize())
