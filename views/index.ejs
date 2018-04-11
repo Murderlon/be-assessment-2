@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,28 +8,45 @@
   <link href="index.css" rel="stylesheet">
   <title>Death to stock</title>
 </head>
+
 <body>
   <header>
     <% if (user) { %>
-      <p>Welcome <%= user %></p>
-      <p><a href="/logout">Logout</a></p>
-      <p><a href="/upload">Upload</a></p>
-    <% } else { %>
-      <p>Waddup</p>      
-      <p><a href="/login">Login</a> or <a href="/register">Register</a></p>
-    <% } %>
+      <p>Welcome
+        <%= user %>
+      </p>
+      <p>
+        <a href="/logout">Logout</a>
+      </p>
+      <p>
+        <a href="/upload">Upload</a>
+      </p>
+      <% } else { %>
+        <p>Waddup</p>
+        <p>
+          <a href="/login">Login</a> or
+          <a href="/register">Register</a>
+        </p>
+        <% } %>
   </header>
   <main>
     <% images.map(({ _id, file, title, description, date }) => { %>
-      <a href="/<%= _id %>">
-        <h2><%= title  %></h2>
-        <time><%= date  %></time>
+      <a href="/post/<%= _id %>">
+        <h2>
+          <%= title  %>
+        </h2>
+        <time>
+          <%= date  %>
+        </time>
         <figure>
           <img src="/img/<%= file.name  %>" alt="<%= description %>">
-          <figcaption><%= description %></figcaption>
+          <figcaption>
+            <%= description %>
+          </figcaption>
         </figure>
         <% }) %>
       </a>
-    </main>
+  </main>
 </body>
+
 </html>

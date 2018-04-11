@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,21 +8,30 @@
   <link href="index.css" rel="stylesheet">
   <title>Detail</title>
 </head>
+
 <body>
   <main>
     <div>
-      <h2><%= image.title  %></h2>
-      <time><%= image.date  %></time>
+      <h2>
+        <%= image.title  %>
+      </h2>
+      <time>
+        <%= image.date  %>
+      </time>
       <figure>
         <img src="/img/<%= image.file.name  %>" alt="<%= image.description %>">
-        <figcaption><%= image.description %></figcaption>
+        <figcaption>
+          <%= image.description %>
+        </figcaption>
       </figure>
-    <% if (isAuthor) { %>
-    <form action="/<%= image._id %>" method="POST">
-      <button type="submit">Remove post</button>
-    <% } %>      
-    </form>
+      <% if (isAuthor) { %>
+        <form action="/<%= image._id %>" method="POST">
+          <button type="submit">Remove post</button>
+        </form>
+        <a href="/edit/<%= image._id %>">Edit</a>
+        <% } %>
     </div>
   </main>
 </body>
+
 </html>
