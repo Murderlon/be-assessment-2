@@ -32,8 +32,10 @@ router.get('/', (req, res, next) => {
   )
 })
 
-// check if logged in
-router.get('/upload', (req, res) => res.render('upload', { err: null }))
+router.get(
+  '/upload',
+  (req, res) => (!req.user ? res.redirect('/') : res.render('upload'))
+)
 
 router.get('/register', (req, res) => res.render('register', { err: null }))
 
