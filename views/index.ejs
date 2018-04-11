@@ -9,8 +9,8 @@
 </head>
 <body>
   <header>
-    <% if (username) { %>
-      <p>Welcome <%= username %></p>
+    <% if (user) { %>
+      <p>Welcome <%= user %></p>
       <p><a href="/logout">Logout</a></p>
       <p><a href="/upload">Upload</a></p>
     <% } else { %>
@@ -19,8 +19,8 @@
     <% } %>
   </header>
   <main>
-    <% images.map(({ file, title, description, date }) => { %>
-      <div>
+    <% images.map(({ _id, file, title, description, date }) => { %>
+      <a href="/<%= _id %>">
         <h2><%= title  %></h2>
         <time><%= date  %></time>
         <figure>
@@ -28,7 +28,7 @@
           <figcaption><%= description %></figcaption>
         </figure>
         <% }) %>
-      </div>
+      </a>
     </main>
 </body>
 </html>

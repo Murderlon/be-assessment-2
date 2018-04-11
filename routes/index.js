@@ -1,26 +1,36 @@
+const fs = require('fs')
+const path = require('path')
 const express = require('express')
 const passport = require('passport')
 const multer = require('multer')
 const delve = require('dlv')
+const shortid = require('shortid')
 
 const User = require('../models/user')
 const Image = require('../models/image')
 const createError = require('../lib/createError')
 
 const router = express.Router()
-const upload = multer({ dest: 'static/img/' })
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, 'static/img'),
+  filename: (req, { originalname }, cb) =>
+    cb(null, shortid.generate() + path.extname(originalname))
+})
+const upload = multer({ storage })
 
-router.get('/', (req, res, next) =>
-  Image.find({}, (err, images) =>
-    err
-      ? next(createError(500))
-      : res.render('index', {
-        images,
-        // delve returns the username if it exists
-        username: delve(req, 'user.username')
-      })
+router.get('/', (req, res, next) => {
+  Image.find(
+    {},
+    (err, images) =>
+      err
+        ? next(createError(500))
+        : res.render('index', {
+          images,
+          // delve returns the username if it exists
+          user: delve(req, 'user.username')
+        })
   )
-)
+})
 
 router.get('/upload', (req, res) => res.render('upload', { err: null }))
 
@@ -33,18 +43,48 @@ router.get('/logout', (req, res) => {
   res.redirect('/')
 })
 
+router.get('/delete/:id', (req, res, next) => {
+  Image.findOneAndRemove({ _id: req.params.id }, (err, image) => {
+    if (err) {
+      return next(createError(500))
+    }
+    if (!image) {
+      return next()
+    }
+    fs.unlink(
+      path.resolve(__dirname, `../static/img/${image.file.name}`),
+      err => (err ? next(createError(500)) : res.status(204).redirect('/'))
+    )
+  })
+})
+
+router.get('/:id', (req, res, next) =>
+  Image.findOne({ _id: req.params.id }, (err, image) => {
+    const isAuthor = delve(req, 'user.username') === delve(image, 'author')
+    if (err) {
+      return next(createError(500))
+    }
+    if (!image) {
+      return next()
+    }
+    res.render('detail', { image, isAuthor })
+  })
+)
+
 router.post('/upload', upload.single('image'), (req, res, next) => {
   try {
     const { filename, mimetype } = req.file
     const { title, description } = req.body
+    const { username } = req.user
     const image = new Image()
 
     image.file = { name: filename, mimetype }
     image.title = title
     image.description = description
+    image.author = username
     image.save()
 
-    res.redirect('/')
+    res.status(201).redirect('/')
   } catch (err) {
     next(createError(500))
   }
@@ -54,10 +94,8 @@ router.post(
   '/login',
   passport.authenticate('local', { failWithError: true }),
   (req, res) => res.redirect('/'),
-  (err, req, res, next) =>
-    res
-      .status(err.status)
-      .render('login', { err: 'Username or password is incorrect' })
+  ({ status, message }, req, res, next) =>
+    res.status(status).render('login', { err: message })
 )
 
 router.post('/register', (req, res, next) => {
