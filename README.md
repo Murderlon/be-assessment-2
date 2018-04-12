@@ -4,12 +4,12 @@
 
 ## Content
 
-* [🏗 Architecture](#architecture)
-* [🔐 Security](#security)
-* [🔁 Sessions](#sessions)
-* [⬆️ Uploads](#uploads)
-* [👩‍💻 Install](#install)
-* [⚖️ Licence](#licence)
+* [🏗 Architecture](#-architecture)
+* [🔐 Security](#-security)
+* [🔁 Sessions](#-sessions)
+* [⬆️ Uploads](#-uploads)
+* [👩‍💻 Install](#-install)
+* [⚖️ Licence](#-licence)
 
 ## 🏗 Architecture
 
