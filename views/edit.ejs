@@ -1,28 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
+<%- include ./partials/head.ejs %>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <link href="index.css" rel="stylesheet">
-  <title>Edit</title>
-</head>
+  <body>
+    <main>
+      <% if (err) { %>
+        <p class="error">
+          <%= err %>
+        </p>
+        <% } %>
+          <img src="/img/<%= image.file.name  %>" alt="<%= image.description %>">
+          <form action="/edit/<%= image._id %>" method="POST">
+            <input type="text" name="title" value="<%= image.title  %>">
+            <input type="text" name="description" value="<%= image.description  %>">
+            <button type="submit">Submit changes</button>
+          </form>
+    </main>
 
-<body>
-  <main>
-    <% if (err) { %>
-      <p class="error">
-        <%= err %>
-      </p>
-      <% } %>
-        <img src="/img/<%= image.file.name  %>" alt="<%= image.description %>">
-        <form action="/edit/<%= image._id %>" method="POST">
-          <input type="text" name="title" value="<%= image.title  %>">
-          <input type="text" name="description" value="<%= image.description  %>">
-          <button type="submit">Submit changes</button>
-        </form>
-  </main>
-</body>
-
-</html>
+    <%- include ./partials/foot.ejs %>
