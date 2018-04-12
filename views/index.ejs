@@ -1,27 +1,35 @@
 <%- include ./partials/head.ejs %>
 
   <header>
-    <% if (user) { %>
-      <p>Welcome
-        <%= user %>
-      </p>
-      <p>
-        <a href="/auth/logout">Logout</a>
-      </p>
-      <p>
-        <a href="/upload">Upload</a>
-      </p>
-      <% } else { %>
-        <p>Waddup</p>
-        <p>
-          <a href="/auth/login">Login</a> or
-          <a href="/auth/register">Register</a>
+    <nav>
+      <% if (user) { %>
+        <p>Welcome
+          <%= user %>
         </p>
-        <% } %>
+        <ul>
+          <li>
+            <a href="/auth/logout">Logout</a>
+          </li>
+          <li>
+            <a href="/upload">Upload</a>
+          </li>
+        </ul>
+        <% } else { %>
+          <p>Waddup</p>
+          <ul>
+            <li>
+              <a href="/auth/login">Login</a>
+            </li>
+            <li>
+              <a href="/auth/register">Register</a>
+            </li>
+          </ul>
+          <% } %>
+    </nav>
   </header>
   <main>
     <% images.map(({ _id, file, title, description, date }) => { %>
-      <a href="/post/<%= _id %>">
+      <a href="/post/<%= _id %>" class="block">
         <h2>
           <%= title  %>
         </h2>
