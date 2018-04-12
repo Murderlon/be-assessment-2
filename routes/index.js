@@ -62,7 +62,7 @@ router.get('/edit/:id', (req, res, next) =>
     if (!image) {
       return next()
     }
-    res.render('edit', { image })
+    res.render('edit', { image, err: null })
   })
 )
 
@@ -91,6 +91,7 @@ router.post('/upload', upload.single('image'), (req, res, next) => {
 router.post('/edit/:id', (req, res, next) =>
   Image.findOne({ _id: req.params.id }, (err, image) => {
     const isAllowed = delve(req, 'user.username') === delve(image, 'author')
+    const { title, description } = req.body
     if (!isAllowed) {
       return next(createError(401))
     }
@@ -100,8 +101,14 @@ router.post('/edit/:id', (req, res, next) =>
     if (!image) {
       return next()
     }
-    image.title = req.body.title
-    image.description = req.body.description
+    if (title.length === 0 || description.length === 0) {
+      return res
+        .status(422)
+        .render('edit', { image, err: 'Title or description is empty' })
+    }
+
+    image.title = title
+    image.description = description
     image.save(err => err && next(createError(500)))
     res.redirect(`/post/${req.params.id}`)
   })

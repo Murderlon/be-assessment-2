@@ -11,12 +11,17 @@
 
 <body>
   <main>
-    <img src="/img/<%= image.file.name  %>" alt="<%= image.description %>">
-    <form action="/edit/<%= image._id %>" method="POST">
-      <input type="text" name="title" value="<%= image.title  %>">
-      <input type="text" name="description" value="<%= image.description  %>">
-      <button type="submit">Submit changes</button>
-    </form>
+    <% if (err) { %>
+      <p class="error">
+        <%= err %>
+      </p>
+      <% } %>
+        <img src="/img/<%= image.file.name  %>" alt="<%= image.description %>">
+        <form action="/edit/<%= image._id %>" method="POST">
+          <input type="text" name="title" value="<%= image.title  %>">
+          <input type="text" name="description" value="<%= image.description  %>">
+          <button type="submit">Submit changes</button>
+        </form>
   </main>
 </body>
 
