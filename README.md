@@ -25,6 +25,8 @@ be-assessment-2/
 │  └─ img/
 │  └─ ...
 ├─ view/
+│  └─ partials/
+│  └─ ...
 ├─ .env
 ├─ package.json
 ├─ README.md
