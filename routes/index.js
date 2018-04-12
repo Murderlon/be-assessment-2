@@ -16,7 +16,7 @@ const storage = multer.diskStorage({
 })
 const upload = multer({ storage })
 
-router.get('/', (req, res, next) => {
+router.get('/', (req, res, next) =>
   Image.find(
     {},
     (err, images) =>
@@ -28,7 +28,7 @@ router.get('/', (req, res, next) => {
           user: delve(req, 'user.username')
         })
   )
-})
+)
 
 router.get(
   '/upload',
@@ -50,7 +50,7 @@ router.get('/post/:id', (req, res, next) =>
   })
 )
 
-router.get('/edit/:id', (req, res, next) => {
+router.get('/edit/:id', (req, res, next) =>
   Image.findOne({ _id: req.params.id }, (err, image) => {
     const isAllowed = delve(req, 'user.username') === delve(image, 'author')
     if (!isAllowed) {
@@ -64,9 +64,12 @@ router.get('/edit/:id', (req, res, next) => {
     }
     res.render('edit', { image })
   })
-})
+)
 
 router.post('/upload', upload.single('image'), (req, res, next) => {
+  if (!req.user) {
+    return next(createError(401))
+  }
   try {
     const { filename, mimetype } = req.file
     const { title, description } = req.body
@@ -85,7 +88,7 @@ router.post('/upload', upload.single('image'), (req, res, next) => {
   }
 })
 
-router.post('/edit/:id', (req, res, next) => {
+router.post('/edit/:id', (req, res, next) =>
   Image.findOne({ _id: req.params.id }, (err, image) => {
     const isAllowed = delve(req, 'user.username') === delve(image, 'author')
     if (!isAllowed) {
@@ -102,9 +105,9 @@ router.post('/edit/:id', (req, res, next) => {
     image.save(err => err && next(createError(500)))
     res.redirect(`/post/${req.params.id}`)
   })
-})
+)
 
-router.post('/delete/:id', (req, res, next) => {
+router.post('/delete/:id', (req, res, next) =>
   Image.findOne({ _id: req.params.id }, (err, image) => {
     const isAllowed = delve(req, 'user.username') === delve(image, 'author')
     if (!isAllowed) {
@@ -122,6 +125,6 @@ router.post('/delete/:id', (req, res, next) => {
       err => (err ? next(createError(500)) : res.redirect('/'))
     )
   })
-})
+)
 
 module.exports = router
