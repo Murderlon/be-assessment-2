@@ -54,7 +54,7 @@ router.get('/edit/:id', (req, res, next) =>
   Image.findOne({ _id: req.params.id }, (err, image) => {
     const isAllowed = delve(req, 'user.username') === delve(image, 'author')
     if (!isAllowed) {
-      return res.status(401).redirect('/')
+      return res.redirect('/')
     }
     if (err) {
       return next(createError(500))
@@ -82,7 +82,7 @@ router.post('/upload', upload.single('image'), (req, res, next) => {
     image.author = username
     image.save()
 
-    res.status(201).redirect('/')
+    res.redirect('/')
   } catch (err) {
     next(createError(500))
   }
