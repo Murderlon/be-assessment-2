@@ -109,8 +109,10 @@ router.post('/edit/:id', (req, res, next) =>
 
     image.title = title
     image.description = description
-    image.save(err => err && next(createError(500)))
-    res.redirect(`/post/${req.params.id}`)
+    image.save(
+      err =>
+        err ? next(createError(500)) : res.redirect(`/post/${req.params.id}`)
+    )
   })
 )
 
@@ -126,10 +128,14 @@ router.post('/delete/:id', (req, res, next) =>
     if (!image) {
       return next()
     }
-    image.remove(err => err && next(createError(500)))
-    fs.unlink(
-      path.resolve(__dirname, `../static/img/${image.file.name}`),
-      err => (err ? next(createError(500)) : res.redirect('/'))
+    image.remove(
+      err =>
+        err
+          ? next(createError(500))
+          : fs.unlink(
+            path.resolve(__dirname, `../static/img/${image.file.name}`),
+            err => (err ? next(createError(500)) : res.redirect('/'))
+          )
     )
   })
 )
